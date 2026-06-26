@@ -134,8 +134,8 @@ public class AISelfMade : MonoBehaviour
     {
         if (_working)
         {
-            ObjManager.Instance.Score += (_appreciation / 10) * Time.deltaTime / 5;
-            Energy -= Time.deltaTime * _energyLossMult;
+            ObjManager.Instance.Score += (_appreciation / 10) * Time.deltaTime;
+            Energy -= Time.deltaTime * (1 + (1 * (_workStation.Comfort / 10)));
             if (Energy < 0)
             {
                 Unsubscribe();
@@ -149,7 +149,7 @@ public class AISelfMade : MonoBehaviour
     {
         if (_resting)
         {
-            Energy += Time.deltaTime * (_appreciation / 10) * _energyGainMult;
+            Energy += Time.deltaTime * (1 + (1 * (_workStation.Comfort / 10)));
             if (Energy > 10)
             {
                 Unsubscribe();
