@@ -30,7 +30,8 @@ public class UiElement : MonoBehaviour
     {
         _cursor.UiActive = false;
         _worker.SetActive(false);
-        _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
+        _currentWorker.Energy += 3;
+        _currentWorker.FindNearestWorkstation();
         ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
         _currentWorker = null;
     }
@@ -38,7 +39,8 @@ public class UiElement : MonoBehaviour
     {
         _cursor.UiActive = false;
         _worker.SetActive(false);
-        _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
+        _currentWorker.Energy += 3;
+        _currentWorker.FindNearestWorkstation();
         _currentWorker.Appreciation -= 2;
         _currentWorker = null;
     }
