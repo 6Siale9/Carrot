@@ -10,6 +10,8 @@ public class cursorController : MonoBehaviour
 
     [SerializeField] private Vector2 clickPosition = Vector2.zero;
 
+    private ModeOfCursor clickMode = ModeOfCursor.Carrot;
+
 
     private void Awake()
     {
@@ -43,12 +45,15 @@ public class cursorController : MonoBehaviour
         {
             case ModeOfCursor.Default:
                 Cursor.SetCursor(cursorTextureDefault, clickPosition, CursorMode.Auto);
+                clickMode = ModeOfCursor.Default;
                 break;
             case ModeOfCursor.Carrot:
                 Cursor.SetCursor(cursorTextureCarrot, clickPosition, CursorMode.Auto);
+                clickMode = ModeOfCursor.Carrot;
                 break;
             case ModeOfCursor.Stick:
                 Cursor.SetCursor(cursorTextureStick, clickPosition, CursorMode.Auto);
+                clickMode = ModeOfCursor.Stick;
                 break;
             default:
                 Cursor.SetCursor(cursorTextureDefault, clickPosition, CursorMode.Auto);
