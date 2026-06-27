@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UiElement : MonoBehaviour
@@ -10,6 +11,8 @@ public class UiElement : MonoBehaviour
     [SerializeField] private GameObject _worker;
     [SerializeField] private GameObject _workstation;
     [SerializeField] private DebugCursor _cursor;
+
+    [SerializeField] private List<TMP_Text> _workerText = new List<TMP_Text>();
 
     private AISelfMade _currentWorker;
     private Obj _currentWorkstation;
@@ -26,43 +29,53 @@ public class UiElement : MonoBehaviour
         }
     }
 
-    public void BtnCarrot()
+    public void BtnFire()
     {
         _cursor.UiActive = false;
         _worker.SetActive(false);
-        _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
-        ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
-        _currentWorker = null;
-    }
-    public void BtnStick()
-    {
-        _cursor.UiActive = false;
-        _worker.SetActive(false);
-        _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
-        _currentWorker.Appreciation -= 2;
+        Destroy(_currentWorker.gameObject);
+        ObjManager.Instance.Ais.Remove(_currentWorker);
         _currentWorker = null;
     }
     public void BtnSize()
     {
-        _cursor.UiActive = false;
-        _workstation.SetActive(false);
-        _currentWorkstation.NbOfSpots += 1;
-        ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
-        _currentWorker = null;
+        if (ObjManager.Instance.Score > 10 && _currentWorkstation.NbOfSpots < _currentWorkstation.MaxNbOfSports)
+        {
+            _cursor.UiActive = false;
+            _workstation.SetActive(false);
+            _currentWorkstation.NbOfSpots += 1;
+            ObjManager.Instance.Score -= 10;
+            _currentWorker = null;
+        }
     }
     public void BtnComfort()
     {
-        _cursor.UiActive = false;
+        if (ObjManager.Instance.Score > 10 && _currentWorkstation.Comfort < 3)
+        {
+            _cursor.UiActive = false;
+            _workstation.SetActive(false);
+            _currentWorkstation.Comfort += 1f;
+            ObjManager.Instance.Score -= 10;
+            _currentWorker = null;
+        }
+    }
+    public void BtnClose()
+    {
         _workstation.SetActive(false);
-        _currentWorkstation.Comfort += 1f;
-        ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
+        _cursor.UiActive = false;
+        _worker.SetActive(false);
         _currentWorker = null;
+        _currentWorkstation = null;
     }
     public void ActivateWorker(AISelfMade worker)
     {
         _cursor.UiActive = true;
         _worker.SetActive(true);
         _currentWorker = worker;
+
+        _workerText[0].text = "Name : " + _currentWorker.Name;
+        _workerText[1].text = "Lazyness : " + Mathf.Round(_currentWorker.EnergyLossMult * 100);
+        _workerText[2].text = "Motivation : " + Mathf.Round(_currentWorker.EnergyGainMult * 100);
     }
     public void ActivateWorkstation(Obj workstation)
     {
