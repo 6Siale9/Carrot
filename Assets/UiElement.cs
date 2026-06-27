@@ -28,6 +28,7 @@ public class UiElement : MonoBehaviour
 
     public void BtnCarrot()
     {
+        _cursor.UiActive = false;
         _worker.SetActive(false);
         _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
         ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
@@ -35,6 +36,7 @@ public class UiElement : MonoBehaviour
     }
     public void BtnStick()
     {
+        _cursor.UiActive = false;
         _worker.SetActive(false);
         _currentWorker.FindNearestWorkstation(EWorkstationType.Work);
         _currentWorker.Appreciation -= 2;
@@ -42,19 +44,29 @@ public class UiElement : MonoBehaviour
     }
     public void BtnSize()
     {
-
+        _cursor.UiActive = false;
+        _workstation.SetActive(false);
+        _currentWorkstation.NbOfSpots += 1;
+        ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
+        _currentWorker = null;
     }
     public void BtnComfort()
     {
-
+        _cursor.UiActive = false;
+        _workstation.SetActive(false);
+        _currentWorkstation.Comfort += 1f;
+        ObjManager.Instance.Score -= 10; // ------------------------------------------------------------------ A modifier pour eviter de partir en negatif
+        _currentWorker = null;
     }
     public void ActivateWorker(AISelfMade worker)
     {
+        _cursor.UiActive = true;
         _worker.SetActive(true);
         _currentWorker = worker;
     }
     public void ActivateWorkstation(Obj workstation)
     {
+        _cursor.UiActive = true;
         _workstation.SetActive(true);
         _currentWorkstation = workstation;
     }

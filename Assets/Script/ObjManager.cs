@@ -8,7 +8,7 @@ public class ObjManager : MonoBehaviour
     [SerializeField] private List<Obj> _objs = new List<Obj>();
     private List<AISelfMade> _ais = new List<AISelfMade>();
     [SerializeField] private Obj _pauseClope;
-    private float _score = 0f;
+    private float _score = 50f;
 
     private static ObjManager instance;
 
