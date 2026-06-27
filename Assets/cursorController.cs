@@ -66,8 +66,8 @@ public class cursorController : MonoBehaviour
 
 
  public enum ModeOfCursor
-{
-     Default,
+ {
+    Default,
     Carrot,
     Stick
-}
+ }

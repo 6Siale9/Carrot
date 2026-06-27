@@ -37,13 +37,16 @@ public class RoomManager : MonoBehaviour
         {
             Destroy(_btns[0].gameObject);
             _btns.RemoveAt(0);
-            _btns[0].gameObject.SetActive(true);
-            Next();
             ObjManager.Instance.Score -= _cost;
-            _cost *= _costMult;
-            _costMult *= 2;
-            TMP_Text text = _btns[0].GetComponentInChildren<TMP_Text>();
-            text.text = _list[0] + " : " + _cost;
+            if (_btns.Count != 0)
+            {
+                _cost *= _costMult;
+                _costMult *= 2;
+                _btns[0].gameObject.SetActive(true);
+                TMP_Text text = _btns[0].GetComponentInChildren<TMP_Text>();
+                text.text = _list[0] + " : " + _cost;
+            }
+            Next();
             _list.RemoveAt(0);
             _pathfinder.Scan();
         }

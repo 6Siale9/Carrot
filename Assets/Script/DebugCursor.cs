@@ -40,7 +40,16 @@ public class DebugCursor : MonoBehaviour
             {
                 UnClick();
             }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                DebugScore();
+            }
         }
+    }
+
+    private void DebugScore()
+    {
+        ObjManager.Instance.Score += 10000;
     }
 
     private void CheckForObject()
@@ -103,7 +112,11 @@ public class DebugCursor : MonoBehaviour
                 ObjManager.Instance.Ais[i].StartFollowing(transform);
                 if (_cursorC.ClickMode == ModeOfCursor.Carrot)
                 {
-                    ObjManager.Instance.Score -= 2.5f;
+                    ObjManager.Instance.Score -= 10;
+                    if (ObjManager.Instance.Score < 0)
+                    {
+                        ObjManager.Instance.Score = 0;
+                    }
                 }
                 else if (_cursorC.ClickMode == ModeOfCursor.Stick)
                 {

@@ -33,6 +33,10 @@ public class UiElement : MonoBehaviour
     {
         _cursor.UiActive = false;
         _worker.SetActive(false);
+        if (_currentWorker.WorkStation != null)
+        {
+            _currentWorker.Unsubscribe();
+        }
         Destroy(_currentWorker.gameObject);
         ObjManager.Instance.Ais.Remove(_currentWorker);
         _currentWorker = null;
