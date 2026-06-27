@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class AISelfMade : MonoBehaviour
@@ -19,11 +18,9 @@ public class AISelfMade : MonoBehaviour
     private float _appreciation = 10f;
     [SerializeField] private float _energyLossMult = 1;
     [SerializeField] private float _energyGainMult = 1;
-    private string _name = "";
 
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
     public float Energy { get => _energy; set => _energy = value; }
-    public string Name { get => _name; set => _name = value; }
 
     #region Base
     private void Start()
@@ -33,9 +30,7 @@ public class AISelfMade : MonoBehaviour
         _energyGainMult = Random.Range(0.1f, 2f);
         _energyLossMult = Random.Range(0.1f, 2f);
         _pauseClope = ObjManager.Instance.PauseClope;
-        FindNearestWorkstation();
-        _name = ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)] + " " + ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)];
-
+        FindNearestWorkstation(EWorkstationType.Work);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -73,7 +68,7 @@ public class AISelfMade : MonoBehaviour
     {
         if (_following)
         {
-            FindNearestWorkstation();
+            FindNearestWorkstation(EWorkstationType.Work);
             _following = false;
         }
     }
@@ -92,47 +87,33 @@ public class AISelfMade : MonoBehaviour
         _aiDestSet.target = null;
     }
 
-    public void FindNearestWorkstation()
+    public void FindNearestWorkstation(EWorkstationType type)
     {
         List<Obj> list = new List<Obj>();
-        if (_energy > 0)
+        for (int i = 0; i < ObjManager.Instance.Objs.Count; i++)
         {
-            for (int i = 0; i < ObjManager.Instance.Objs.Count; i++)
+            if (ObjManager.Instance.Objs[i].Type == type && ObjManager.Instance.Objs[i].Subscribed.Count < ObjManager.Instance.Objs[i].NbOfSpots)
             {
-                if (ObjManager.Instance.Objs[i].Type != EWorkstationType.Rest && ObjManager.Instance.Objs[i].Subscribed.Count < ObjManager.Instance.Objs[i].NbOfSpots)
-                {
-                    list.Add(ObjManager.Instance.Objs[i]);
-                }
+                list.Add(ObjManager.Instance.Objs[i]);
             }
+        }
+        float d = 0;
+        Obj o = _pauseClope;
+        if (list.Count == 0)
+        {
+            _aiDestSet.target = o.transform;
         }
         else
         {
-            for (int i = 0; i < ObjManager.Instance.Objs.Count; i++)
-            {
-                if (ObjManager.Instance.Objs[i].Type == EWorkstationType.Rest && ObjManager.Instance.Objs[i].Subscribed.Count < ObjManager.Instance.Objs[i].NbOfSpots)
-                {
-                    list.Add(ObjManager.Instance.Objs[i]);
-                }
-            }
-        }
-
-        Obj o = _pauseClope;
-        float d = 0;
-        if (list.Count > 0)
-        {
             for (int i = 0; i < list.Count; i++)
             {
-                if (Vector3.Distance(transform.position, list[i].transform.position) < d || d == 0)
+                if (Vector3.Distance(transform.position, ObjManager.Instance.Objs[i].transform.position) > d || d == 0)
                 {
-                    d = Vector3.Distance(transform.position, list[i].transform.position);
+                    d = Vector3.Distance(transform.position, ObjManager.Instance.Objs[i].transform.position);
                     o = list[i];
                 }
             }
             Subscribe(o);
-        }
-        else
-        {
-            _aiDestSet.target = _pauseClope.transform;
         }
     }
     #endregion Actions
@@ -159,7 +140,7 @@ public class AISelfMade : MonoBehaviour
             {
                 Unsubscribe();
                 _working = false;
-                FindNearestWorkstation();
+                FindNearestWorkstation(EWorkstationType.Rest);
             }
         }
     }
@@ -173,7 +154,7 @@ public class AISelfMade : MonoBehaviour
             {
                 Unsubscribe();
                 _resting = false;
-                FindNearestWorkstation();
+                FindNearestWorkstation(EWorkstationType.Work);
             }
         }
     }

@@ -14,9 +14,4 @@ public class Obj : MonoBehaviour
     public EWorkstationType Type { get => _type; set => _type = value; }
     public List<AISelfMade> Subscribed { get => _subscribed; set => _subscribed = value; }
     public float Comfort { get => _comfort; set => _comfort = value; }
-
-    private void Start()
-    {
-        ObjManager.Instance.Objs.Add(this);
-    }
 }
