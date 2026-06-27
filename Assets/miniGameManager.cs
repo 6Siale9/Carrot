@@ -1,42 +1,115 @@
+using System.Security;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class miniGameManager : MonoBehaviour
 {
-    [SerializeField] private float clockInterval = 3f;
+    [SerializeField] private float clockInterval = 1f;
     private float clockTime = 0f;
     public TextMeshProUGUI timerText;
+    public TextMeshProUGUI betText;
+    public TextMeshProUGUI Pourcentage;
 
 
-    private int betValue = 1000;
-    private int randomPourcentage = 0;
-    public void randomPourcentageGenerator()
+
+    [SerializeField] public string inputText;
+    [SerializeField] private TMP_Text reactionTextBox;
+    [SerializeField] private GameObject reactionGroup;
+    [SerializeField] private float inputParsedAsFloat;
+
+    [SerializeField] private float maxTimeSpent = 30f;
+    [SerializeField] private int minOdds = -5;
+    [SerializeField] private int maxOdds = 15;
+    private float currentTimeSpent;
+    
+    private bool betIsActive = false;
+    private float startingBetValue = 0;
+    private float betValue = 0;
+    private float randomPourcentage = 0;
+    
+ 
+
+
+    public void grabFromInputField (string input)
     {
-        randomPourcentage = Random.Range(-20, 20);
-        randomPourcentage = randomPourcentage / 100;
-        randomPourcentage = randomPourcentage + 1;
-
-        betValue = betValue * randomPourcentage;
-        Debug.Log(betValue);
+        inputText = input;
+        inputParsedAsFloat = float.Parse(input);
+        startingBetValue = inputParsedAsFloat;
     }
-
     public void clock()
     {
-        clockTime += Time.deltaTime;
-        timerText.text = clockTime.ToString();
-        if(clockTime >= clockInterval)
+        if (betIsActive == true)
         {
-            randomPourcentageGenerator();
-            clockTime = 0f;
+            clockTime += Time.deltaTime;
+            timerText.text = clockTime.ToString();
+            if(clockTime >= clockInterval)
+            {
+                randomPourcentageGenerator();
+                clockTime = 0f;
+            }
+            currentTimeSpent += Time.deltaTime;
+            if (currentTimeSpent >= maxTimeSpent)
+            {
+                stopBet();
+                currentTimeSpent = 0;
+            }
         }
+
     }
-    // Start is called before the first frame update
-    void Start()
+    public void randomPourcentageGenerator()
     {
+        randomPourcentage = Random.Range(minOdds, maxOdds);
+        if (randomPourcentage > 0)
+        {
+        Pourcentage.color = Color.green;
+        Pourcentage.text = "+" + randomPourcentage.ToString() + "%";
+        }
+
+        if (randomPourcentage == 0)
+        {
+        Pourcentage.color = Color.gray;
+        Pourcentage.text = randomPourcentage.ToString() + "%";
+        }
+
+        if (randomPourcentage < 0)
+        {
+        Pourcentage.color = Color.red;
+        Pourcentage.text = randomPourcentage.ToString() + "%";
+        }
+
+        randomPourcentage = randomPourcentage / 100;
+
+        //betValue = betValue + (startingBetValue * randomPourcentage);
+        betValue = betValue * (1 + randomPourcentage);
+        betText.text = betValue.ToString("F0");
+        
+
+    }
+    public void stopBet()
+    {
+        Pourcentage.text = "0";
+        betIsActive = false;
+    }
+
+    public void startBet()
+    {
+        betValue = startingBetValue;
+        betIsActive = true;
+        Pourcentage.text = "0";
+        betText.text = betValue.ToString();
+        betValue = startingBetValue;
         clockTime = 0f;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        clockTime = 0f;
+        Pourcentage.text = "0";
+        betText.text = "0";
+    }
+
     void Update()
     {
         clock();
