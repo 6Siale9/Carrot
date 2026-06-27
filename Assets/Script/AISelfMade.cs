@@ -24,14 +24,16 @@ public class AISelfMade : MonoBehaviour
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
     public float Energy { get => _energy; set => _energy = value; }
     public string Name { get => _name; set => _name = value; }
+    public float EnergyLossMult { get => _energyLossMult; set => _energyLossMult = value; }
+    public float EnergyGainMult { get => _energyGainMult; set => _energyGainMult = value; }
 
     #region Base
     private void Start()
     {
         ObjManager.Instance.Ais.Add(this);
         Energy = Random.Range(0f, 10f);
-        _energyGainMult = Random.Range(0.1f, 2f);
-        _energyLossMult = Random.Range(0.1f, 2f);
+        EnergyGainMult = Random.Range(0.1f, 2f);
+        EnergyLossMult = Random.Range(0.1f, 2f);
         _pauseClope = ObjManager.Instance.PauseClope;
         FindNearestWorkstation();
         _name = ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)] + " " + ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)];
@@ -66,6 +68,8 @@ public class AISelfMade : MonoBehaviour
     {
         Unsubscribe();
         _following = true;
+        _working = false;
+        _resting = false;
         _aiDestSet.target = cursor;
     }
 

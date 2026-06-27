@@ -6,6 +6,7 @@ public class DebugCursor : MonoBehaviour
 {
     [SerializeField] private float _size = 0;
     private bool _uiActive = false;
+    [SerializeField] private cursorController _cursorC;
 
     public bool UiActive { get => _uiActive; set => _uiActive = value; }
 
@@ -26,45 +27,71 @@ public class DebugCursor : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                //Click();
-                CheckForObject();
+                if (_cursorC.ClickMode != ModeOfCursor.Default)
+                {
+                    Click();
+                }
+                else
+                {
+                    CheckForObject();
+                }
             }
             if (Input.GetMouseButtonUp(0))
             {
-                //UnClick();
+                UnClick();
             }
         }
     }
 
     private void CheckForObject()
     {
-        /*
-        Vector3 end = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
-        Vector3 start = Camera.main.transform.position;
-        Ray ray = new Ray(start, start -end );
-        RaycastHit hit = new RaycastHit();
-        Physics.Raycast(ray, out hit);
-        AISelfMade a = hit.rigidbody.gameObject.GetComponent<AISelfMade>();
-        Debug.DrawRay(start, start - end, Color.red, 2);
-        */
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D raycastHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)), Vector2.zero);
-        
-        
-        
-        if (raycastHit.collider.CompareTag("LittleGuys"))
+        RaycastHit2D[] raycastHit = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)), Vector2.zero);
+
+        AISelfMade a = FindWorker(raycastHit);
+
+        if (a != null)
         {
-            AISelfMade a = raycastHit.collider.GetComponent<AISelfMade>();
             UiElement.Instance.ActivateWorker(a);
-        }
-        if (raycastHit.collider.CompareTag("Workstation"))
-        {
-            Obj b = raycastHit.collider.GetComponent<Obj>();
-            UiElement.Instance.ActivateWorkstation(b);
+            return;
         }
 
-        
+        Obj o = FindWorkstation(raycastHit);
+
+        if (o != null)
+        {
+            UiElement.Instance.ActivateWorkstation(o);
+        }
+    }
+
+    private AISelfMade FindWorker(RaycastHit2D[] raycastHit)
+    {
+        for (int i = 0; i < raycastHit.Length; i++)
+        {
+            if (raycastHit[i].collider != null)
+            {
+                if (raycastHit[i].collider.CompareTag("LittleGuys"))
+                {
+                    return raycastHit[i].collider.GetComponent<AISelfMade>();
+                }
+            }
+        }
+        return null;
+    }
+
+    private Obj FindWorkstation(RaycastHit2D[] raycastHit)
+    {
+        for (int i = 0; i < raycastHit.Length; i++)
+        {
+            if (raycastHit[i].collider != null)
+            {
+                if (raycastHit[i].collider.CompareTag("Workstation"))
+                {
+                    return raycastHit[i].collider.GetComponent<Obj>();
+                }
+            }
+        }
+        return null;
     }
 
     private void Click()
@@ -74,7 +101,14 @@ public class DebugCursor : MonoBehaviour
             if (Vector3.Distance(transform.position, ObjManager.Instance.Ais[i].transform.position) < _size)
             {
                 ObjManager.Instance.Ais[i].StartFollowing(transform);
-                ObjManager.Instance.Ais[i].Appreciation -= 2;
+                if (_cursorC.ClickMode == ModeOfCursor.Carrot)
+                {
+                    ObjManager.Instance.Score -= 2.5f;
+                }
+                else if (_cursorC.ClickMode == ModeOfCursor.Stick)
+                {
+                    ObjManager.Instance.Ais[i].Appreciation -= 3;
+                }
             }
         }
     }
