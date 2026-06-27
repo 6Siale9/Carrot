@@ -9,6 +9,7 @@ public class ObjManager : MonoBehaviour
     private List<AISelfMade> _ais = new List<AISelfMade>();
     [SerializeField] private Obj _pauseClope;
     private float _score = 50f;
+    private float _meetingMult = 1f;
 
     [SerializeField] private List<string> _names = new List<string>();
 
@@ -20,6 +21,7 @@ public class ObjManager : MonoBehaviour
     public Obj PauseClope { get => _pauseClope; set => _pauseClope = value; }
     public float Score { get => _score; set => _score = value; }
     public List<string> Names { get => _names; set => _names = value; }
+    public float MeetingMult { get => _meetingMult; set => _meetingMult = value; }
 
     private void Awake()
     {

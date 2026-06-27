@@ -20,6 +20,7 @@ public class AISelfMade : MonoBehaviour
     [SerializeField] private float _energyLossMult = 1;
     [SerializeField] private float _energyGainMult = 1;
     private string _name = "";
+    private float _archiveBonus = 1;
 
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
     public float Energy { get => _energy; set => _energy = value; }
@@ -27,6 +28,7 @@ public class AISelfMade : MonoBehaviour
     public float EnergyLossMult { get => _energyLossMult; set => _energyLossMult = value; }
     public float EnergyGainMult { get => _energyGainMult; set => _energyGainMult = value; }
     public bool Working { get => _working; set => _working = value; }
+    public Obj WorkStation { get => _workStation; set => _workStation = value; }
 
     #region Base
     private void Start()
@@ -43,15 +45,44 @@ public class AISelfMade : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<Obj>() == _workStation)
+        if (collision.GetComponent<Obj>() != null)
         {
-            if (_workStation.Type == EWorkstationType.Work)
+            Obj obj = collision.GetComponent<Obj>();
+            if (obj == WorkStation)
             {
-                StartWorking();
+                switch (obj.Type)
+                {
+                    case EWorkstationType.Work:
+                        StartWorking();
+                        break;
+                    case EWorkstationType.Rest:
+                        StartResting();
+                        _archiveBonus = 1;
+                        break;
+                    case EWorkstationType.Meeting:
+                        break;
+                    case EWorkstationType.Archive:
+                        if (!_working)
+                        {
+                            _appreciation -= 6;
+                        }
+                        StartWorking();
+                        RoundAndRound(WorkStation);
+                        _archiveBonus += 1;
+                        break;
+                    case EWorkstationType.Casino:
+                        break;
+                    case EWorkstationType.PauseClope:
+                        break;
+                }
             }
-            else if (_workStation.Type == EWorkstationType.Rest)
+            else if (_workStation != null)
             {
-                StartResting();
+                if (WorkStation.Type == EWorkstationType.Archive && obj.Type == EWorkstationType.Archive && _working)
+                {
+                    RoundAndRound(collision.GetComponent<Obj>());
+                    _archiveBonus += 1;
+                }
             }
         }
     }
@@ -65,9 +96,26 @@ public class AISelfMade : MonoBehaviour
     #endregion Base
 
     #region Actions
+    private void RoundAndRound(Obj ooo)
+    {
+        List<Obj> list = new List<Obj>();
+        for (int i = 0; i < ObjManager.Instance.Objs.Count; i++)
+        {
+            if (ObjManager.Instance.Objs[i].Type == EWorkstationType.Archive)
+            {
+                list.Add(ObjManager.Instance.Objs[i]);
+            }
+        }
+        list.Remove(ooo);
+        _aiDestSet.target = list[Random.Range(0, list.Count)].transform;
+    }
+
     public void StartFollowing(Transform cursor)
     {
-        Unsubscribe();
+        if (WorkStation != null)
+        {
+            Unsubscribe();
+        }
         _following = true;
         Working = false;
         _resting = false;
@@ -83,17 +131,17 @@ public class AISelfMade : MonoBehaviour
         }
     }
 
-    private void Subscribe(Obj obj)
+    public void Subscribe(Obj obj)
     {
-        _workStation = obj;
-        _workStation.Subscribed.Add(this);
+        WorkStation = obj;
+        WorkStation.Subscribed.Add(this);
         _aiDestSet.target = obj.transform;
     }
 
-    private void Unsubscribe()
+    public void Unsubscribe()
     {
-        _workStation?.Subscribed.Remove(this);
-        _workStation = null;
+        WorkStation.Subscribed.Remove(this);
+        WorkStation = null;
         _aiDestSet.target = null;
     }
 
@@ -158,11 +206,18 @@ public class AISelfMade : MonoBehaviour
     {
         if (Working)
         {
-            ObjManager.Instance.Score += (_appreciation / 10) * Time.deltaTime;
-            Energy -= Time.deltaTime * (1 + (1 * (_workStation.Comfort / 10)));
+            float bonus = WorkStation.Comfort / 10;
+            ObjManager.Instance.Score += (_appreciation / 10) * Time.deltaTime * ObjManager.Instance.MeetingMult * _archiveBonus * (1 + bonus);
+            bonus = 1 - bonus;
+            bonus -= (_archiveBonus / 10);
+            bonus = Mathf.Clamp(bonus, 0.1f, 1);
+            Energy -= Time.deltaTime * bonus;
             if (Energy < 0)
             {
-                Unsubscribe();
+                if (WorkStation != null)
+                {
+                    Unsubscribe();
+                }
                 Working = false;
                 FindNearestWorkstation();
             }
@@ -173,10 +228,13 @@ public class AISelfMade : MonoBehaviour
     {
         if (_resting)
         {
-            Energy += Time.deltaTime * (1 + (1 * (_workStation.Comfort / 10)));
+            Energy += Time.deltaTime * (1 + (3 * (WorkStation.Comfort / 10)));
             if (Energy > 10)
             {
-                Unsubscribe();
+                if (WorkStation != null)
+                {
+                    Unsubscribe();
+                }
                 _resting = false;
                 FindNearestWorkstation();
             }
@@ -187,6 +245,11 @@ public class AISelfMade : MonoBehaviour
     {
         if (_appreciation <= 0)
         {
+            ObjManager.Instance.Ais.Remove(this);
+            if (WorkStation != null)
+            {
+                Unsubscribe();
+            }
             Destroy(gameObject);
         }
     }
