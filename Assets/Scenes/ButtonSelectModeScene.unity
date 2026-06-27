@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTextureDefault: {fileID: 2800000, guid: 931c8559b8628754eb9ebd0a70d54601, type: 3}
-  cursorTextureCarrot: {fileID: 2800000, guid: bbfc6aa599162ea49a55c0b8a491d861, type: 3}
+  cursorTextureCarrot: {fileID: 2800000, guid: c905af8ec9d284e4d9b8c276567e1fcb, type: 3}
   cursorTextureStick: {fileID: 0}
   clickPosition: {x: 0, y: 0}
 --- !u!1 &1642589343
