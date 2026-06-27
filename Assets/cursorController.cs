@@ -55,14 +55,10 @@ public class cursorController : MonoBehaviour
                 break;
         }
     }
-
-
-
-
-
-
-
 }
+
+
+
  public enum ModeOfCursor
 {
      Default,

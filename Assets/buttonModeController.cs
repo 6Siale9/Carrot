@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class clickModeController : MonoBehaviour
+public class buttonModeController : MonoBehaviour
 {
     [SerializeField] private ModeOfCursor modeOfCursor;
 
