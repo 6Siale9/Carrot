@@ -26,6 +26,7 @@ public class AISelfMade : MonoBehaviour
     public string Name { get => _name; set => _name = value; }
     public float EnergyLossMult { get => _energyLossMult; set => _energyLossMult = value; }
     public float EnergyGainMult { get => _energyGainMult; set => _energyGainMult = value; }
+    public bool Working { get => _working; set => _working = value; }
 
     #region Base
     private void Start()
@@ -68,7 +69,7 @@ public class AISelfMade : MonoBehaviour
     {
         Unsubscribe();
         _following = true;
-        _working = false;
+        Working = false;
         _resting = false;
         _aiDestSet.target = cursor;
     }
@@ -144,7 +145,7 @@ public class AISelfMade : MonoBehaviour
     #region WorkAndRest
     private void StartWorking()
     {
-        _working = true;
+        Working = true;
     }
 
     private void StartResting()
@@ -155,14 +156,14 @@ public class AISelfMade : MonoBehaviour
 
     private void WorkLogic()
     {
-        if (_working)
+        if (Working)
         {
             ObjManager.Instance.Score += (_appreciation / 10) * Time.deltaTime;
             Energy -= Time.deltaTime * (1 + (1 * (_workStation.Comfort / 10)));
             if (Energy < 0)
             {
                 Unsubscribe();
-                _working = false;
+                Working = false;
                 FindNearestWorkstation();
             }
         }
