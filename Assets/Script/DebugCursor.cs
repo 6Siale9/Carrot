@@ -52,8 +52,7 @@ public class DebugCursor : MonoBehaviour
         RaycastHit2D raycastHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)), Vector2.zero);
         
         
-
-
+        
         if (raycastHit.collider.CompareTag("LittleGuys"))
         {
             AISelfMade a = raycastHit.collider.GetComponent<AISelfMade>();
@@ -64,6 +63,8 @@ public class DebugCursor : MonoBehaviour
             Obj b = raycastHit.collider.GetComponent<Obj>();
             UiElement.Instance.ActivateWorkstation(b);
         }
+
+        
     }
 
     private void Click()

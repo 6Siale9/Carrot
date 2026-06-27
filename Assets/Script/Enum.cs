@@ -2,5 +2,8 @@ public enum EWorkstationType
 {
     Work,
     Rest,
-    PauseClope
+    PauseClope,
+    Meeting,
+    Archive,
+    Casino
 }
