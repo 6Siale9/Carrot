@@ -21,6 +21,7 @@ public class AISelfMade : MonoBehaviour
     [SerializeField] private float _energyGainMult = 1;
     private string _name = "";
     private float _archiveBonus = 1;
+    [SerializeField] private List<GameObject> _toInstantiate = new List<GameObject>();
 
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
     public float Energy { get => _energy; set => _energy = value; }
@@ -29,6 +30,7 @@ public class AISelfMade : MonoBehaviour
     public float EnergyGainMult { get => _energyGainMult; set => _energyGainMult = value; }
     public bool Working { get => _working; set => _working = value; }
     public Obj WorkStation { get => _workStation; set => _workStation = value; }
+
 
     #region Base
     private void Start()
@@ -40,7 +42,8 @@ public class AISelfMade : MonoBehaviour
         _pauseClope = ObjManager.Instance.PauseClope;
         FindNearestWorkstation();
         _name = ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)] + " " + ObjManager.Instance.Names[Random.Range(0, ObjManager.Instance.Names.Count)];
-
+        GameObject g = _toInstantiate[Random.Range(0, _toInstantiate.Count)];
+        Instantiate(g, transform);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
