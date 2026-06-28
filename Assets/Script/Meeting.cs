@@ -14,7 +14,7 @@ public class Meeting : MonoBehaviour
     {
         if (ObjManager.Instance.Ais.Count > _meetingPlaces.Count)
         {
-
+            SoundManager.Instance.PlayMeeting();
             for (int i = 0; i < _meetingPlaces.Count; i++)
             {
                 _meetingPlaces[i].NbOfSpots = 1;
@@ -54,6 +54,7 @@ public class Meeting : MonoBehaviour
 
     private void EndMeeting()
     {
+        SoundManager.Instance.PlayMeeting();
         _btn.SetActive(true);
         _meetingActivated = false;
         ObjManager.Instance.MeetingMult = 1;

@@ -6,7 +6,7 @@ using UnityEngine;
 public class UpgradeArchive : MonoBehaviour
 {
     private int _archiveLvl = 1;
-    private float _cost = 100;
+    private float _cost = 1000;
     [SerializeField] private TMP_Text _text;
     [SerializeField] private Obj _workstation;
 

@@ -114,6 +114,7 @@ public class DebugCursor : MonoBehaviour
                 {
                     ObjManager.Instance.Score -= 10;
                     ObjManager.Instance.Ais[i].UiTemp(true);
+                    SoundManager.Instance.PlayCarrot();
                     if (ObjManager.Instance.Score < 0)
                     {
                         ObjManager.Instance.Score = 0;
@@ -123,6 +124,7 @@ public class DebugCursor : MonoBehaviour
                 {
                     ObjManager.Instance.Ais[i].UiTemp(false);
                     ObjManager.Instance.Ais[i].Appreciation -= 3;
+                    SoundManager.Instance.PlayStick();
                 }
             }
         }

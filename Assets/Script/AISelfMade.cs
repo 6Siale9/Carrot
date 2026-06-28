@@ -79,7 +79,7 @@ public class AISelfMade : MonoBehaviour
                     case EWorkstationType.Archive:
                         if (!_working)
                         {
-                            _appreciation -= 6;
+                            _appreciation -= 2;
                             UiTemp(false);
                         }
                         StartWorking();
@@ -294,6 +294,7 @@ public class AISelfMade : MonoBehaviour
     {
         if (_appreciation <= 0)
         {
+            SoundManager.Instance.PlayAngry();
             ObjManager.Instance.Ais.Remove(this);
             if (WorkStation != null)
             {

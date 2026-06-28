@@ -27,13 +27,9 @@ public class cursorController : MonoBehaviour
         }
     }
 
-
-
-
-
     void Start()
     {
-        Cursor.SetCursor(cursorTextureDefault, clickPosition, CursorMode.Auto);
+        setToMode(ModeOfCursor.Carrot);
     }
 
 
