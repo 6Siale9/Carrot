@@ -266,7 +266,11 @@ public class AISelfMade : MonoBehaviour
                 {
                     Unsubscribe();
                 }
-
+                if (game != null)
+                {
+                    game.stopBet();
+                    game = null;
+                }
                 Working = false;
                 FindNearestWorkstation();
             }
