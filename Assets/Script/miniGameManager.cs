@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class miniGameManager : MonoBehaviour
 {
-    [SerializeField] private float clockInterval = 1f;
+    [SerializeField] private float clockInterval = 3f;
     private float clockTime = 0f;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI betText;
@@ -114,7 +114,7 @@ public class miniGameManager : MonoBehaviour
         betIsActive = true;
         Pourcentage.text = "0";
         betText.text = betValue.ToString();
-        clockTime = 0f;
+        clockTime = 3f;
     }
 
     void Start()
