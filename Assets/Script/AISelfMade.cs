@@ -22,6 +22,11 @@ public class AISelfMade : MonoBehaviour
     private string _name = "";
     private float _archiveBonus = 1;
     [SerializeField] private List<GameObject> _toInstantiate = new List<GameObject>();
+    [SerializeField] private GameObject _sad;
+    [SerializeField] private GameObject _carrot;
+    private float _uiTempTime = 0;
+
+
 
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
     public float Energy { get => _energy; set => _energy = value; }
@@ -68,6 +73,7 @@ public class AISelfMade : MonoBehaviour
                         if (!_working)
                         {
                             _appreciation -= 6;
+                            UiTemp(false);
                         }
                         StartWorking();
                         RoundAndRound(WorkStation);
@@ -95,6 +101,7 @@ public class AISelfMade : MonoBehaviour
         WorkLogic();
         RestLogic();
         LeaveLogic();
+        UiTempLogic();
     }
     #endregion Base
 
@@ -189,6 +196,33 @@ public class AISelfMade : MonoBehaviour
         else
         {
             _aiDestSet.target = _pauseClope.transform;
+        }
+    }
+
+    public void UiTemp(bool isCarrot)
+    {
+        _uiTempTime = 1;
+        if (isCarrot)
+        {
+            _carrot.SetActive(true);
+        }
+        else
+        {
+            _sad.SetActive(true);
+        }
+    }
+
+    private void UiTempLogic()
+    {
+        if (_uiTempTime > 0)
+        {
+            _uiTempTime -= Time.deltaTime;
+        }
+        else if (_uiTempTime < 0)
+        {
+            _uiTempTime = 0;
+            _carrot.SetActive(false);
+            _sad.SetActive(false);
         }
     }
     #endregion Actions
