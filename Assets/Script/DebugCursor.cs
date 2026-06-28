@@ -113,6 +113,7 @@ public class DebugCursor : MonoBehaviour
                 if (_cursorC.ClickMode == ModeOfCursor.Carrot)
                 {
                     ObjManager.Instance.Score -= 10;
+                    ObjManager.Instance.Ais[i].UiTemp(true);
                     if (ObjManager.Instance.Score < 0)
                     {
                         ObjManager.Instance.Score = 0;
@@ -120,6 +121,7 @@ public class DebugCursor : MonoBehaviour
                 }
                 else if (_cursorC.ClickMode == ModeOfCursor.Stick)
                 {
+                    ObjManager.Instance.Ais[i].UiTemp(false);
                     ObjManager.Instance.Ais[i].Appreciation -= 3;
                 }
             }
