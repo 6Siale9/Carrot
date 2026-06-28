@@ -49,7 +49,7 @@ public class DebugCursor : MonoBehaviour
 
     private void DebugScore()
     {
-        ObjManager.Instance.Score += 10000;
+        //ObjManager.Instance.Score += 10000;
     }
 
     private void CheckForObject()
