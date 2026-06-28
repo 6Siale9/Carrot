@@ -10,7 +10,7 @@ public class cursorController : MonoBehaviour
 
     [SerializeField] private Vector2 clickPosition = Vector2.zero;
 
-    [SerializeField] private ModeOfCursor clickMode = ModeOfCursor.Carrot;
+    [SerializeField] private ModeOfCursor clickMode = ModeOfCursor.Default;
 
     public ModeOfCursor ClickMode { get => clickMode; set => clickMode = value; }
 

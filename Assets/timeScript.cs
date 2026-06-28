@@ -9,8 +9,8 @@ public class timeScript : MonoBehaviour
 
     public System.TimeSpan timeSpan = new System.TimeSpan(0,0, 0,0,0);
 
-    public System.DateTime date = new System.DateTime(1990, 04, 20);
-    public float timeRate = 36;
+    public System.DateTime date = new System.DateTime(1990, 04, 20, 00, 00, 00);
+    public float timeRate = 60;
 
     private void Update()
     {
@@ -19,7 +19,7 @@ public class timeScript : MonoBehaviour
         timeSpan += new System.TimeSpan(0, 0, 0, 0, (int)minutes);
         System.DateTime dateTime = date.Add(timeSpan);
 
-        mainClock.text = dateTime.ToString(@myFormat, new CultureInfo("en-US"));
+        mainClock.text = dateTime.ToString(@myFormat);
     }
 
 
