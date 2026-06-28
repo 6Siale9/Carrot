@@ -54,12 +54,12 @@ public class UiElement : MonoBehaviour
     }
     public void BtnComfort()
     {
-        if (ObjManager.Instance.Score > 10 && _currentWorkstation.Comfort < 3)
+        if (ObjManager.Instance.Score > 150 && _currentWorkstation.Comfort < 3)
         {
             _cursor.UiActive = false;
             _workstation.SetActive(false);
-            _currentWorkstation.Comfort += 1f;
-            ObjManager.Instance.Score -= 10;
+            _currentWorkstation.Comfort += 5f;
+            ObjManager.Instance.Score -= 150;
             _currentWorker = null;
         }
     }

@@ -17,9 +17,9 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
 
-    public void mainMenuButton()
+    public void ExitButton()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(null); //-------------- Ajouter Main Menu Scene
+        Application.Quit();
     }
 
     public void resumeButton()
