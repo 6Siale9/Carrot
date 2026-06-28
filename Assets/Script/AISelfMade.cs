@@ -26,6 +26,11 @@ public class AISelfMade : MonoBehaviour
     [SerializeField] private GameObject _carrot;
     private float _uiTempTime = 0;
 
+    private miniGameManager game;
+
+    
+
+
 
 
     public float Appreciation { get => _appreciation; set => _appreciation = value; }
@@ -53,7 +58,9 @@ public class AISelfMade : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        
         if (collision.GetComponent<Obj>() != null)
+        
         {
             Obj obj = collision.GetComponent<Obj>();
             if (obj == WorkStation)
@@ -80,6 +87,10 @@ public class AISelfMade : MonoBehaviour
                         _archiveBonus += 1;
                         break;
                     case EWorkstationType.Casino:
+                        miniGameManager miniGameCasino = obj.MiniGame;
+                        game = miniGameCasino;
+                        miniGameCasino.appear();
+                        StartWorking();
                         break;
                     case EWorkstationType.PauseClope:
                         break;
@@ -255,6 +266,7 @@ public class AISelfMade : MonoBehaviour
                 {
                     Unsubscribe();
                 }
+
                 Working = false;
                 FindNearestWorkstation();
             }

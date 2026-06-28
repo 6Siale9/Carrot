@@ -1,4 +1,5 @@
 using System.Security;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class miniGameManager : MonoBehaviour
     public TextMeshProUGUI Pourcentage;
 
 
-
+    public GameObject miniGameContainer;
     [SerializeField] public string inputText;
     [SerializeField] private TMP_Text reactionTextBox;
     [SerializeField] private GameObject reactionGroup;
@@ -23,7 +24,8 @@ public class miniGameManager : MonoBehaviour
     [SerializeField] private int minOdds = -5;
     [SerializeField] private int maxOdds = 15;
     private float currentTimeSpent;
-    
+
+    [SerializeField] private ObjManager score;   
     private bool betIsActive = false;
     private float startingBetValue = 0;
     private float betValue = 0;
@@ -31,7 +33,15 @@ public class miniGameManager : MonoBehaviour
     
  
 
+    public void appear()
+    {
+        miniGameContainer.SetActive(true);
+    }
 
+    public void disappear()
+    {
+        miniGameContainer.SetActive(false);
+    }
     public void grabFromInputField (string input)
     {
         inputText = input;
@@ -91,15 +101,19 @@ public class miniGameManager : MonoBehaviour
     {
         Pourcentage.text = "0";
         betIsActive = false;
+        score._score += betValue;
+        startingBetValue = 0;
+        disappear();
     }
 
     public void startBet()
     {
         betValue = startingBetValue;
+        score._score -= betValue;
+
         betIsActive = true;
         Pourcentage.text = "0";
         betText.text = betValue.ToString();
-        betValue = startingBetValue;
         clockTime = 0f;
     }
 
@@ -110,6 +124,20 @@ public class miniGameManager : MonoBehaviour
         betText.text = "0";
     }
 
+    public void setBetValue()
+    {
+        if (betIsActive == false)
+        {
+            startingBetValue += 250;
+            betText.text = startingBetValue.ToString();
+        }
+
+        else
+        {
+            return;
+        }
+ 
+    }
     void Update()
     {
         clock();

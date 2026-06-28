@@ -9,6 +9,7 @@ public class Obj : MonoBehaviour
     [SerializeField] private int _maxNbOfSports = 0;
     [SerializeField] private EWorkstationType _type = EWorkstationType.Work;
     [SerializeField] private float _comfort = 0f;
+    [SerializeField] private miniGameManager miniGame;
     private List<AISelfMade> _subscribed = new List<AISelfMade>();
 
     public int NbOfSpots { get => _nbOfSpots; set => _nbOfSpots = value; }
@@ -16,6 +17,7 @@ public class Obj : MonoBehaviour
     public List<AISelfMade> Subscribed { get => _subscribed; set => _subscribed = value; }
     public float Comfort { get => _comfort; set => _comfort = value; }
     public int MaxNbOfSports { get => _maxNbOfSports; set => _maxNbOfSports = value; }
+    public miniGameManager MiniGame { get => miniGame; set => miniGame = value; }
 
     private void Start()
     {
